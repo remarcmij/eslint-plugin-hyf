@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     node: true,
     browser: true,
@@ -7,7 +8,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  extends: "eslint:recommended",
+  extends: ["eslint:recommended", "prettier"],
   rules: {
     "no-var": "error",
     "prefer-const": "error",
