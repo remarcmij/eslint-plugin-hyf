@@ -1,5 +1,6 @@
 type Validator = (
-  node: Identifier & Rule.NodeParentExtension,
+  node: ESTree.Node,
+  id: IdentifierParentExtension,
   context: Rule.RuleContext
 ) => void;
 

@@ -3,6 +3,7 @@ module.exports = {
   env: {
     node: true,
     browser: true,
+    es6: true,
   },
   parserOptions: {
     ecmaVersion: 2018,
@@ -25,8 +26,8 @@ module.exports = {
     ],
     "array-callback-return": "error",
     "hyf/use-map-result": "error",
-    "hyf/descriptive-names": "warn",
-    "hyf/no-redundant-affixes": "warn",
+    "hyf/descriptive-names": ["warn", "data|item"],
+    "hyf/no-meaningless-affixes": ["warn", "[a-z]Array$|[a-z]Object$"],
     "hyf/camelcase": "warn",
     "hyf/no-commented-out-code": "warn",
   },

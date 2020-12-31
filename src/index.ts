@@ -1,15 +1,15 @@
-import redundantAffixesRule from "./rules/affixes";
+import meaninglessAffixRule from "./rules/meaninglessAffix";
 import camelCaseRule from "./rules/camelCase";
 import commentedOutCodeRule from "./rules/comments";
-import descriptiveNamesRule from "./rules/descriptive-names";
-import useMapResult from "./rules/useMapResult";
+import descriptiveNamesRule from "./rules/descriptiveNames";
+import useMapResultRule from "./rules/useMapResult";
 
 const ruleModule = {
   rules: {
     camelcase: camelCaseRule,
-    "use-map-result": useMapResult,
+    "use-map-result": useMapResultRule,
     "descriptive-names": descriptiveNamesRule,
-    "no-redundant-affixes": redundantAffixesRule,
+    "no-meaningless-affixes": meaninglessAffixRule,
     "no-commented-out-code": commentedOutCodeRule,
   },
 };

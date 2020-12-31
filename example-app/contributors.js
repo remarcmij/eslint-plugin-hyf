@@ -8,7 +8,6 @@ import {
   sectionContributorsContainer,
 } from "./createAllElements.js";
 
-a = 1;
 export function addContributors() {
   //getting the value of the selected repo
   const selectedRepo = selectBox.value;
