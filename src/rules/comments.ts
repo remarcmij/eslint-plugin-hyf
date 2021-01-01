@@ -51,7 +51,7 @@ function commentedOutCodeCheck(node: Program, context: Rule.RuleContext): void {
       }
 
       context.report({
-        message: "remove commented-out code",
+        messageId: "removeComments",
         loc: startLoc,
       });
     } else {
@@ -61,6 +61,11 @@ function commentedOutCodeCheck(node: Program, context: Rule.RuleContext): void {
 }
 
 const rule: Rule.RuleModule = {
+  meta: {
+    messages: {
+      removeComments: "Remove commented-out code.",
+    },
+  },
   create(context: Rule.RuleContext): Rule.RuleListener {
     return {
       "Program:exit": function (node: Program) {

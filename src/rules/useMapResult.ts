@@ -4,7 +4,8 @@ import { Identifier } from "estree";
 const rule: Rule.RuleModule = {
   meta: {
     messages: {
-      replaceMapWithForEach: "Replace `map` with `forEach`.",
+      replaceMapWithForEach:
+        "Results from `map` are unused. Replace `map` with `forEach`.",
     },
   },
   create(context) {

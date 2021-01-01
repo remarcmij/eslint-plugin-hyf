@@ -17,7 +17,7 @@ const FUNC_4 = (data, gObject) => {
   }
 };
 
-let ABC_1 = 10;
+const ABC_1 = 10;
 
 let j;
 for (j = 1; j < 10; j++);

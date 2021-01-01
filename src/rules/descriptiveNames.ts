@@ -37,7 +37,7 @@ function descriptiveNamesChecker(
 const rule: Rule.RuleModule = {
   meta: {
     messages: {
-      descriptiveName: "'{{ name }}' is not a descriptive name.",
+      descriptiveName: "Identifier '{{ name }}' is not very descriptive.",
     },
   },
   create(context) {

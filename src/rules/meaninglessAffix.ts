@@ -24,7 +24,8 @@ function meaninglessAffixChecker(
 const rule: Rule.RuleModule = {
   meta: {
     messages: {
-      meaninglessAffix: "'{{ name }}' name has a meaningless prefix or suffix.",
+      meaninglessAffix:
+        "Identifier '{{ name }}' has a meaningless prefix or suffix.",
     },
   },
   create(context) {
