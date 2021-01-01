@@ -9,15 +9,23 @@ tester.run("camelCase", rule, {
     { code: "let foo = 1;" },
     { code: "const FOO_BAR = 1;" },
     { code: "function foo() {}" },
+    { code: "function Foo() { this.bar = 1; }" },
     { code: "function foo(bar) {}" },
-    { code: "const foo = {bar: 1};" },
+    { code: "const foo = { bar: 1 };" },
   ],
   invalid: [
     { code: "let FOO = 1;", errors: [{ messageId: "camelCase" }] },
     { code: "const foo_bar = 1;", errors: [{ messageId: "camelCase" }] },
-    { code: "function Foo() {}", errors: [{ messageId: "camelCaseFunction" }] },
+    { code: "function Foo() {}", errors: [{ messageId: "camelCase" }] },
+    {
+      code: "function Foo() { this.bar = 1; return {}; }",
+      errors: [{ messageId: "camelCase" }],
+    },
     { code: "function foo(Bar) {}", errors: [{ messageId: "camelCase" }] },
-    { code: "const foo = {Bar: 1};", errors: [{ messageId: "camelCase" }] },
-    { code: "const foo = {foo_bar: 1};", errors: [{ messageId: "camelCase" }] },
+    { code: "const foo = { Bar: 1 };", errors: [{ messageId: "camelCase" }] },
+    {
+      code: "const foo = { foo_bar: 1 };",
+      errors: [{ messageId: "camelCase" }],
+    },
   ],
 });
