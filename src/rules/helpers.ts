@@ -1,5 +1,5 @@
 import { Rule } from "eslint";
-import { Node, Pattern } from "estree";
+import { FunctionDeclaration, Node, Pattern } from "estree";
 
 function paramsValidator(
   node: Node,
@@ -44,9 +44,24 @@ export function nameValidator(
   validator: Validator,
   context: Rule.RuleContext
 ): Rule.RuleListener {
+  const functionStack: FunctionInfo[] = [];
+
   return {
-    FunctionDeclaration(node) {
-      validator(node, node.id, context);
+    FunctionDeclaration() {
+      functionStack.push({ thisAssignmentSeen: false, returnSeen: false });
+    },
+    "FunctionDeclaration ExpressionStatement > AssignmentExpression > MemberExpression > ThisExpression": () => {
+      functionStack[functionStack.length - 1].thisAssignmentSeen = true;
+    },
+    "FunctionDeclaration ReturnStatement": () => {
+      functionStack[functionStack.length - 1].returnSeen = true;
+    },
+    "FunctionDeclaration:exit": (node: FunctionDeclaration) => {
+      const functionInfo = functionStack.pop();
+      if (!functionInfo) {
+        throw new Error("function stack underflow");
+      }
+      validator(node, node.id, context, functionInfo);
       paramsValidator(node, node.params, validator, context);
     },
     FunctionExpression(node) {

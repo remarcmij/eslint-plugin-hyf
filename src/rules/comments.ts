@@ -3,7 +3,6 @@ import { Rule } from "eslint";
 import { Program } from "estree";
 
 const statementPatterns = [
-  /^\s*async\s+function\b/,
   /^\s*await\s+\w+/,
   /^\s*break\b/,
   /^\s*case\s+.+:/,
@@ -15,7 +14,7 @@ const statementPatterns = [
   /^\s*{?\s*else\b/,
   /^\s*export\s+\w+/,
   /^\s*for\s*\(/,
-  /^\s*function\s+\w+/,
+  /^\s*(?:async\s+)?function\b/,
   /^\s*if\s*\(/,
   /^\s*import\s*{?\w+/,
   /^\s*let\s+\w+/,
