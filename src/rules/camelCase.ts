@@ -12,14 +12,26 @@ function camelCaseChecker(
   context: Rule.RuleContext,
   functionInfo?: FunctionInfo
 ): void {
-  if (isCamelCase(id.name)) {
-    return;
-  }
   if (isShoutCase(id.name)) {
     if (node.type === "VariableDeclaration" && node.kind === "const") {
       return;
     }
   }
+
+  if (isCamelCase(id.name)) {
+    if (functionInfo) {
+      const { thisAssignmentSeen, returnSeen } = functionInfo;
+      if (thisAssignmentSeen && !returnSeen) {
+        context.report({
+          node: id,
+          messageId: "usePascalCase",
+          data: { name: id.name },
+        });
+      }
+    }
+    return;
+  }
+
   if (isPascalCase(id.name)) {
     // Allow PascalCase for constructor functions, characterized by having
     // assignments to the `this` object but no `return` statement.
@@ -30,9 +42,10 @@ function camelCaseChecker(
       }
     }
   }
+
   context.report({
     node: id,
-    messageId: "camelCase",
+    messageId: "useCamelCase",
     data: { name: id.name },
   });
 }
@@ -40,7 +53,9 @@ function camelCaseChecker(
 const rule: Rule.RuleModule = {
   meta: {
     messages: {
-      camelCase: "Identifier '{{ name }}' name is not in camelCase.",
+      useCamelCase: "Identifier '{{ name }}' is not in camelCase.",
+      usePascalCase:
+        "Function '{{ name }}' looks like a constructor function. If so, please use a PascalCase name.",
     },
   },
   create(context) {

@@ -14,18 +14,25 @@ tester.run("camelCase", rule, {
     { code: "const foo = { bar: 1 };" },
   ],
   invalid: [
-    { code: "let FOO = 1;", errors: [{ messageId: "camelCase" }] },
-    { code: "const foo_bar = 1;", errors: [{ messageId: "camelCase" }] },
-    { code: "function Foo() {}", errors: [{ messageId: "camelCase" }] },
+    { code: "let FOO = 1;", errors: [{ messageId: "useCamelCase" }] },
+    { code: "const foo_bar = 1;", errors: [{ messageId: "useCamelCase" }] },
+    { code: "function Foo() {}", errors: [{ messageId: "useCamelCase" }] },
+    {
+      code: "function foo() { this.bar = 1; }",
+      errors: [{ messageId: "usePascalCase" }],
+    },
     {
       code: "function Foo() { this.bar = 1; return {}; }",
-      errors: [{ messageId: "camelCase" }],
+      errors: [{ messageId: "useCamelCase" }],
     },
-    { code: "function foo(Bar) {}", errors: [{ messageId: "camelCase" }] },
-    { code: "const foo = { Bar: 1 };", errors: [{ messageId: "camelCase" }] },
+    { code: "function foo(Bar) {}", errors: [{ messageId: "useCamelCase" }] },
+    {
+      code: "const foo = { Bar: 1 };",
+      errors: [{ messageId: "useCamelCase" }],
+    },
     {
       code: "const foo = { foo_bar: 1 };",
-      errors: [{ messageId: "camelCase" }],
+      errors: [{ messageId: "useCamelCase" }],
     },
   ],
 });

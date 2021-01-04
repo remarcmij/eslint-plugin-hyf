@@ -21,3 +21,8 @@ const ABC_1 = 10;
 
 let j;
 for (j = 1; j < 10; j++);
+
+const arr = [1, 2, 3];
+console.log(arr[1]);
+
+arr["test"] = 10;

@@ -17,11 +17,16 @@ module.exports = {
     "no-useless-computed-key": "error",
     eqeqeq: "error",
     "no-restricted-syntax": [
-      "error",
+      "warn",
       {
         selector:
-          "ExpressionStatement > CallExpression > MemberExpression > Identifier[name='filter']",
-        message: "Replace `filter` with `forEach`.",
+          "ExpressionStatement > CallExpression > MemberExpression > Identifier[name='map']",
+        message: "Results from `map` are unused. Replace `map` with `forEach`.",
+      },
+      {
+        // disallow numeric literals as array indices (zero is allowed)
+        selector: "MemberExpression[computed] > Literal[value>0]",
+        message: "No literal",
       },
     ],
     "array-callback-return": "error",
