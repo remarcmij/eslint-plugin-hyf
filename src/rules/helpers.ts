@@ -1,5 +1,6 @@
 import { Rule } from "eslint";
 import { FunctionDeclaration, Node, Pattern } from "estree";
+import { Validator, FunctionInfo } from "./types";
 
 function paramsValidator(
   node: Node,
@@ -10,18 +11,16 @@ function paramsValidator(
   params.forEach((param) => {
     switch (param.type) {
       case "AssignmentPattern":
-        validator(node, param.left as IdentifierParentExtension, context);
+        validator(node, param.left, context);
         break;
       case "RestElement":
-        validator(node, param.argument as IdentifierParentExtension, context);
+        validator(node, param.argument, context);
         break;
       case "ArrayPattern":
-        param.elements.forEach((element) =>
-          validator(node, element as IdentifierParentExtension, context)
-        );
+        param.elements.forEach((element) => validator(node, element, context));
         break;
       case "Identifier":
-        validator(node, param as IdentifierParentExtension, context);
+        validator(node, param, context);
         break;
       default:
         throw new Error(`unexpected AST type: ${param.type}`);
@@ -61,7 +60,8 @@ export function nameValidator(
       if (!functionInfo) {
         throw new Error("function stack underflow");
       }
-      validator(node, node.id, context, functionInfo);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      validator(node, node.id!, context, functionInfo);
       paramsValidator(node, node.params, validator, context);
     },
     FunctionExpression(node) {

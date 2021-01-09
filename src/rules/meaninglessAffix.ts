@@ -4,9 +4,12 @@ import { nameValidator } from "./helpers";
 
 function meaninglessAffixChecker(
   node: Node,
-  id: IdentifierParentExtension,
+  id: Node,
   context: Rule.RuleContext
 ): void {
+  if (id.type !== 'Identifier') {
+    return;
+  }
   let pattern = /[a-z]Array$|[a-z]Object$/;
   if (context.options.length > 0 || typeof context.options[0] === "string") {
     pattern = new RegExp(context.options[0]);

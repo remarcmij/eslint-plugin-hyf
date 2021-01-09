@@ -3,10 +3,13 @@ import { Node } from "estree";
 import { nameValidator } from "./helpers";
 
 function descriptiveNamesChecker(
-  node: Node & Rule.NodeParentExtension,
-  id: IdentifierParentExtension,
+  node: Node,
+  id: Node,
   context: Rule.RuleContext
 ): void {
+  if (id.type !== "Identifier") {
+    return;
+  }
   let names = ["data", "item"];
   if (context.options.length > 0 || typeof context.options[0] === "string") {
     names = context.options[0].split("|").map((name: string) => name.trim());
@@ -23,8 +26,10 @@ function descriptiveNamesChecker(
   if (id.name.length !== 1) {
     return;
   }
+
+  const nodeEx = node as Node & Rule.NodeParentExtension;
   // Allow single letters for for-loop index variables
-  if (node.parent.type === "ForStatement") {
+  if (nodeEx.parent.type === "ForStatement") {
     return;
   }
   context.report({

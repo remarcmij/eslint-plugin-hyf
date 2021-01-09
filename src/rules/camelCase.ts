@@ -1,6 +1,7 @@
 import { Rule } from "eslint";
 import { Node } from "estree";
 import { nameValidator } from "./helpers";
+import { FunctionInfo } from "./types";
 
 const isCamelCase = (name: string) => /^_?[a-z][a-zA-Z0-9]*$/.test(name);
 const isPascalCase = (name: string) => /^_?[A-Z][a-zA-Z0-9]+$/.test(name);
@@ -8,10 +9,13 @@ const isShoutCase = (name: string) => /^_?[_A-Z0-9]+$/.test(name);
 
 function camelCaseChecker(
   node: Node,
-  id: IdentifierParentExtension,
+  id: Node,
   context: Rule.RuleContext,
   functionInfo?: FunctionInfo
 ): void {
+  if (id.type !== "Identifier") {
+    return;
+  }
   if (isShoutCase(id.name)) {
     if (node.type === "VariableDeclaration" && node.kind === "const") {
       return;
