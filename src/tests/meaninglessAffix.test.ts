@@ -6,7 +6,7 @@ const tester = new RuleTester({ parserOptions: { ecmaVersion: 2016 } });
 
 const options = ["[a-z]Array$|[a-z]Object$"];
 
-tester.run("meaninglessAffix", rule, {
+tester.run("no-meaningless-affixes", rule, {
   valid: [{ code: "const foo = 1;", options }],
   invalid: [
     {

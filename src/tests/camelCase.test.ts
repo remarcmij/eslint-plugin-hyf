@@ -4,7 +4,7 @@ import rule from "../rules/camelCase";
 
 const tester = new RuleTester({ parserOptions: { ecmaVersion: 2016 } });
 
-tester.run("camelCase", rule, {
+tester.run("camelcase", rule, {
   valid: [
     { code: "let foo = 1;" },
     { code: "const FOO_BAR = 1;" },

@@ -15,7 +15,7 @@ function descriptiveNamesChecker(
   if (names.includes(id.name)) {
     context.report({
       node: id,
-      messageId: "descriptiveName",
+      messageId: "nondescriptName",
       data: { name: id.name },
     });
     return;
@@ -29,7 +29,7 @@ function descriptiveNamesChecker(
   }
   context.report({
     node: id,
-    messageId: "descriptiveName",
+    messageId: "nondescriptName",
     data: { name: id.name },
   });
 }
@@ -37,7 +37,7 @@ function descriptiveNamesChecker(
 const rule: Rule.RuleModule = {
   meta: {
     messages: {
-      descriptiveName: "Identifier '{{ name }}' is not very descriptive.",
+      nondescriptName: "Identifier '{{ name }}' is nondescript.",
     },
   },
   create(context) {
