@@ -7,8 +7,7 @@
     "clean": "rimraf lib",
     "build": "tsc",
     "test": "jest",
-    "example": "cd example-app && npm install",
-    "prepare": "npm run clean && npm run build && npm run example"
+    "prepare": "npm run clean && npm run build"
   },
   "keywords": [],
   "author": "",
