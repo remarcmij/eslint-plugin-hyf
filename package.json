@@ -6,8 +6,7 @@
   "scripts": {
     "clean": "rimraf lib",
     "build": "tsc",
-    "test": "jest",
-    "prepare": "npm run clean && npm run build"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
