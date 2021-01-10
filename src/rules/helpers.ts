@@ -40,8 +40,7 @@ function paramsValidator(
           context
         );
         break;
-      default:
-        throw new Error(`unexpected AST type: ${param.type}`);
+      default: // ignore
     }
   });
 }
