@@ -1,15 +1,12 @@
 import { Rule } from "eslint";
-import { Node } from "estree";
+import { Identifier, Node } from "estree";
 import { nameValidator } from "./helpers";
 
 function descriptiveNamesChecker(
-  node: Node,
-  id: Node,
+  node: Node & Rule.NodeParentExtension,
+  id: Identifier & Rule.NodeParentExtension,
   context: Rule.RuleContext
 ): void {
-  if (id.type !== "Identifier") {
-    return;
-  }
   let names = ["data", "item"];
   if (context.options.length > 0 || typeof context.options[0] === "string") {
     names = context.options[0].split("|").map((name: string) => name.trim());
@@ -27,9 +24,8 @@ function descriptiveNamesChecker(
     return;
   }
 
-  const nodeEx = node as Node & Rule.NodeParentExtension;
   // Allow single letters for for-loop index variables
-  if (nodeEx.parent.type === "ForStatement") {
+  if (node.parent.type === "ForStatement") {
     return;
   }
   context.report({

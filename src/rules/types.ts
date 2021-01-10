@@ -1,5 +1,5 @@
 import { Rule } from "eslint";
-import { Node } from "estree";
+import { Node, Identifier } from "estree";
 
 export type FunctionInfo = {
   thisAssignmentSeen: boolean;
@@ -7,8 +7,8 @@ export type FunctionInfo = {
 };
 
 export type Validator = (
-  node: Node,
-  id: Node,
+  node: Node & Rule.NodeParentExtension,
+  id: Identifier & Rule.NodeParentExtension,
   context: Rule.RuleContext,
   functionInfo?: FunctionInfo
 ) => void;

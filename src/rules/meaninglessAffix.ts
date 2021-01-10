@@ -1,15 +1,12 @@
 import { Rule } from "eslint";
-import { Node } from "estree";
+import { Identifier, Node } from "estree";
 import { nameValidator } from "./helpers";
 
 function meaninglessAffixChecker(
-  node: Node,
-  id: Node,
+  node: Node & Rule.NodeParentExtension,
+  id: Identifier & Rule.NodeParentExtension,
   context: Rule.RuleContext
 ): void {
-  if (id.type !== 'Identifier') {
-    return;
-  }
   let pattern = /[a-z]Array$|[a-z]Object$/;
   if (context.options.length > 0 || typeof context.options[0] === "string") {
     pattern = new RegExp(context.options[0]);

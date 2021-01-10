@@ -1,9 +1,15 @@
 import { Rule } from "eslint";
-import { FunctionDeclaration, Node, Pattern } from "estree";
-import { Validator, FunctionInfo } from "./types";
+import { FunctionDeclaration, Identifier, Node, Pattern } from "estree";
+import { FunctionInfo, Validator } from "./types";
+
+function isIdentifier(
+  node: Node
+): node is Identifier & Rule.NodeParentExtension {
+  return node.type === "Identifier";
+}
 
 function paramsValidator(
-  node: Node,
+  node: Node & Rule.NodeParentExtension,
   params: Array<Pattern>,
   validator: Validator,
   context: Rule.RuleContext
@@ -11,32 +17,33 @@ function paramsValidator(
   params.forEach((param) => {
     switch (param.type) {
       case "AssignmentPattern":
-        validator(node, param.left, context);
+        if (isIdentifier(param.left)) {
+          validator(node, param.left, context);
+        }
         break;
       case "RestElement":
-        validator(node, param.argument, context);
+        if (isIdentifier(param.argument)) {
+          validator(node, param.argument, context);
+        }
         break;
       case "ArrayPattern":
-        param.elements.forEach((element) => validator(node, element, context));
+        param.elements.forEach((element) => {
+          if (isIdentifier(element)) {
+            validator(node, element, context);
+          }
+        });
         break;
       case "Identifier":
-        validator(node, param, context);
+        validator(
+          node,
+          param as Identifier & Rule.NodeParentExtension,
+          context
+        );
         break;
       default:
         throw new Error(`unexpected AST type: ${param.type}`);
     }
   });
-}
-
-export function up(
-  node: Node & Rule.NodeParentExtension,
-  count: number
-): (Node & Rule.NodeParentExtension) | null {
-  while (node.parent && count > 0) {
-    node = node.parent;
-    count--;
-  }
-  return count === 0 ? node : null;
 }
 
 export function nameValidator(
@@ -55,17 +62,21 @@ export function nameValidator(
     "FunctionDeclaration ReturnStatement": () => {
       functionStack[functionStack.length - 1].returnSeen = true;
     },
-    "FunctionDeclaration:exit": (node: FunctionDeclaration) => {
+    "FunctionDeclaration:exit": (
+      node: FunctionDeclaration & Rule.NodeParentExtension
+    ) => {
       const functionInfo = functionStack.pop();
       if (!functionInfo) {
         throw new Error("function stack underflow");
       }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      validator(node, node.id!, context, functionInfo);
+      if (!node.id || !isIdentifier(node.id)) {
+        throw new Error("Expected an Identifier node");
+      }
+      validator(node, node.id, context, functionInfo);
       paramsValidator(node, node.params, validator, context);
     },
     FunctionExpression(node) {
-      if (node.id) {
+      if (node.id && isIdentifier(node.id)) {
         validator(node, node.id, context);
       }
       paramsValidator(node, node.params, validator, context);
@@ -75,7 +86,9 @@ export function nameValidator(
     },
     VariableDeclaration(node) {
       node.declarations.forEach((decl) => {
-        validator(node, decl.id, context);
+        if (isIdentifier(decl.id)) {
+          validator(node, decl.id, context);
+        }
       });
     },
     ObjectExpression(node) {
@@ -83,7 +96,7 @@ export function nameValidator(
         if (
           prop.type === "Property" &&
           prop.kind === "init" &&
-          prop.key.type === "Identifier"
+          isIdentifier(prop.key)
         ) {
           validator(node, prop.key, context);
         }
